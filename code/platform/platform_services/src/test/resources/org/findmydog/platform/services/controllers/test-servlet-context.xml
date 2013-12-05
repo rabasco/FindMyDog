@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd">
+
+    <!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+
+    <!-- Scans within the base package of the application for @Components to configure as beans -->
+    <!-- @Controller, @Service, @Configuration, etc. -->
+    <context:component-scan base-package="org.findmydog.platform.services.controllers" /> 
+
+    <!-- Enables the Spring MVC @Controller programming model -->
+    <mvc:annotation-driven />
+    
+    <!-- Enable Annotation Driven Configuration -->
+    <context:annotation-config />
+    
+
+    <!-- Mongo DB -->
+    <mongo:mongo host="127.0.0.1" port="27017" />
+	
+    <!-- Mongo DB Factory -->
+    <mongo:db-factory dbname="findmydog" mongo-ref="mongo"/>
+	
+    <!-- Mongo Template -->
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
+    </bean>
+    
+    <!-- Repositories @Autowire -->
+    <bean id="userRepository" class="org.findmydog.platform.module.repository.UserRepositoryMongoImpl" />
+    <bean id="petReposity" class="org.findmydog.platform.module.repository.PetRepositoryMongoImpl" />
+    <bean id="reportRepository" class="org.findmydog.platform.module.repository.ReportRepositoryMongoImpl" />
+    <bean id="mediaRepository" class="org.findmydog.platform.module.repository.MediaRepositoryMongoImpl" />
+       
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="1000000"/>
+    </bean>
+    
+    
+    
+</beans>
